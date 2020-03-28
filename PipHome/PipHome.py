@@ -1,11 +1,15 @@
+from inspect import getmembers, isfunction
 from tkinter import *
 from tkinter import ttk
 
+from PipHome import Tabs
 from PipHome.PipFrame import PipFrame
 from PipHome.PipLabel import PipLabel
 from PipHome.PipLog import Logger
 from PipHome.PipNotebook import PipNotebook
+from PipHome.PipSchedule import GLOBAL_SCHEDULER
 
+_logger = Logger("PipHome", level="DEBUG")
 
 def run(args):
     config = {
@@ -25,14 +29,17 @@ def run(args):
             }
         }
     }
-    render(config["gui"])
+    GLOBAL_SCHEDULER.start_main_loop()
+
+    functions_list = list(
+        filter(lambda func: func[0].startswith("render"),
+               [o for o in getmembers(Tabs) if isfunction(o[1])]))
+    _logger.debug("Found functions to render tabs: {}", ", ".join(list(map(lambda func: func[0], functions_list))))
+    render(config["gui"], list(map(lambda func: func[1], functions_list)))
 
 
-logger = Logger("PipHome")
-
-
-def render(gui_config):
-    logger.info("Starting application")
+def render(gui_config, tabs_functions):
+    _logger.info("Starting application")
     # root
     root = Tk()
     size = gui_config["size"]
@@ -84,15 +91,8 @@ def render(gui_config):
     # tabs
     tabs = PipNotebook(root)
     tabs.config(padding="0")
-
-    time_tab = PipFrame(tabs, borderwidth="-2")
-    time = PipLabel(time_tab, text="17:22")
-    time.pack()
-    tabs.add(time_tab, text="Time")
-
-    home_tab = PipFrame(tabs, borderwidth="-2")
-    tabs.add(home_tab, text="Home")
-
+    for tab_function in tabs_functions:
+        tab_function(tabs)
     tabs.pack(expand=1, fill="both")
 
     # bottom frame
