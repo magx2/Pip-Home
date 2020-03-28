@@ -3,6 +3,7 @@ from tkinter import ttk
 
 from PipHome.PipFrame import PipFrame
 from PipHome.PipLabel import PipLabel
+from PipHome.PipLog import Logger
 from PipHome.PipNotebook import PipNotebook
 
 
@@ -27,7 +28,11 @@ def run(args):
     render(config["gui"])
 
 
+logger = Logger("PipHome")
+
+
 def render(gui_config):
+    logger.info("Starting application")
     # root
     root = Tk()
     size = gui_config["size"]
