@@ -27,6 +27,10 @@ def run(args):
             "selected_tab": {
                 "foreground": "#0D0208",
                 "background": "#008F11"
+            },
+            "time_tab": {
+                # https://stackabuse.com/how-to-format-dates-in-python/
+                "date_format": "%a, %d %b %Y"
             }
         }
     }
@@ -89,7 +93,7 @@ def render(gui_config):
     # tabs
     tabs = PipNotebook(root)
     tabs.config(padding="0")
-    TimeTab(tabs)
+    TimeTab(tabs, time_tab_config=gui_config["time_tab"])
     HomeTab(tabs)
     tabs.pack(expand=1, fill="both")
 

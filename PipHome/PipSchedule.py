@@ -31,6 +31,7 @@ class Scheduler:
 
     def add_task(self, task_name, task_function):
         self._tasks[task_name] = (task_function, 0)
+        return task_name
 
     def _loop(self):
         while not self._stop:
