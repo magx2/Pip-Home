@@ -36,10 +36,10 @@ def run(args):
     }
     GLOBAL_SCHEDULER.start_main_loop()
 
-    render(config["gui"])
+    _render(config["gui"])
 
 
-def render(gui_config):
+def _render(gui_config):
     _logger.info("Starting application")
     # root
     root = Tk()
@@ -51,44 +51,7 @@ def render(gui_config):
                    borderwidth="0",
                    highlightthickness="0")
 
-    # style https://stackoverflow.com/questions/23038356/change-color-of-tab-header-in-ttk-notebook/25444652
-
-    style = ttk.Style()
-    style.theme_create("pip_home", parent="alt", settings={
-        "TFrame": {
-            "configure": {
-                "background": gui_config["label"]["background"],
-            }
-        },
-        "TLabel": {
-            "configure": {
-                "background": gui_config["label"]["background"],
-                "foreground": gui_config["label"]["foreground"]
-            }
-        },
-        "TNotebook": {
-            "configure": {
-                # "tabmargins": [2, 5, 2, 0],
-                "borderwidth": 0,
-                "highlightthickness": 0,
-                "background": gui_config["background"]
-            }
-        },
-        "TNotebook.Tab": {
-            "configure": {
-                # "padding": [5, 1],
-                "background": gui_config["label"]["background"],
-                "foreground": gui_config["label"]["foreground"]
-            },
-            "map": {
-                "background": [("selected", gui_config["selected_tab"]["background"])],
-                "foreground": [("selected", gui_config["selected_tab"]["foreground"])]
-                # ,"expand": [("selected", [1, 1, 1, 0])]
-            }
-        }
-    })
-
-    style.theme_use("pip_home")
+    _configure_style(gui_config)
 
     # tabs
     tabs = PipNotebook(root)
@@ -108,3 +71,44 @@ def render(gui_config):
     bluetooth.pack(side="right")
 
     root.mainloop()
+
+
+def _configure_style(gui_config):
+    # style https://stackoverflow.com/questions/23038356/change-color-of-tab-header-in-ttk-notebook/25444652
+    style = ttk.Style()
+    style.theme_create("pip_home", parent="alt", settings={
+        "TFrame": {
+            "configure": {
+                "background": gui_config["label"]["background"],
+            }
+        },
+        "TLabel": {
+            "configure": {
+                "background": gui_config["label"]["background"],
+                "foreground": gui_config["label"]["foreground"],
+                "font": "RobotoMono"
+            }
+        },
+        "TNotebook": {
+            "configure": {
+                "tabmargins": [10, 10, 10, 0],
+                "borderwidth": 0,
+                "highlightthickness": 0,
+                "background": gui_config["background"]
+            }
+        },
+        "TNotebook.Tab": {
+            "configure": {
+                "padding": [5, 5, 5, 0],
+                "background": gui_config["label"]["background"],
+                "foreground": gui_config["label"]["foreground"],
+                "font": "RobotoMono 24"
+            },
+            "map": {
+                "background": [("selected", gui_config["selected_tab"]["background"])],
+                "foreground": [("selected", gui_config["selected_tab"]["foreground"])]
+            }
+        }
+    })
+
+    style.theme_use("pip_home")

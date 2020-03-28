@@ -1,5 +1,5 @@
 from datetime import datetime
-from tkinter import LEFT, BOTTOM, RIGHT
+from tkinter import LEFT, BOTTOM, RIGHT, BOTH, Y
 
 from PipHome.PipFrame import PipFrame
 from PipHome.PipLabel import PipLabel
@@ -20,20 +20,24 @@ class TimeTab(PipTab):
         self.notebook.add(self, text="Time")
 
     def _build_time(self):
-        self._time_frame = PipFrame(self)
-        self._hours = PipLabel(self._time_frame, text="xx")
-        self._separator = PipLabel(self._time_frame, text=":")
-        self._minutes = PipLabel(self._time_frame, text="xx")
+        font = "RobotoMono 48"
+        time_frame = PipFrame(self)
+        center_frame = PipFrame(time_frame)
+        self._hours = PipLabel(center_frame, text="xx", font=font)
+        self._separator = PipLabel(center_frame, text=":", font=font)
+        self._minutes = PipLabel(center_frame, text="xx", font=font)
         self._hours.pack(side=LEFT)
         self._separator.pack(side=LEFT)
         self._minutes.pack(side=LEFT)
-        self._time_frame.pack()
+        center_frame.pack(fill=Y, expand=1)
+        time_frame.pack(fill=BOTH, expand=1)
         GLOBAL_SCHEDULER.add_task("update clock", self._update_time)
         GLOBAL_SCHEDULER.add_task("update clock separator", self._update_time_separator)
 
     def _build_date(self):
+        font = "RobotoMono 18"
         self._date_frame = PipFrame(self)
-        self._date = PipLabel(self._date_frame, text="...")
+        self._date = PipLabel(self._date_frame, text="...", font=font)
         self._date.pack(side=RIGHT)
         self._date_frame.pack(side=BOTTOM)
         GLOBAL_SCHEDULER.add_task("update date", self._update_date)
