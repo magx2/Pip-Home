@@ -19,6 +19,8 @@ class Logger:
 
     def _log(self, level, msg, *values):
         if self._log_levels_map[level] >= self._log_levels_map[self._options["level"]]:
+            if not type(msg) == str:
+                msg = str(msg)
             print(str(datetime.now()) + " [" + level + "] [" + self._name + "] " + msg.format(*values))
 
     def trace(self, msg, *values):
