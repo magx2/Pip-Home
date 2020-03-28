@@ -1,11 +1,10 @@
 from tkinter import *
 from tkinter import ttk
 
-from PipHome.PipFrame import PipFrame
-from PipHome.PipLabel import PipLabel
 from PipHome.PipLog import Logger
 from PipHome.PipNotebook import PipNotebook
 from PipHome.PipSchedule import GLOBAL_SCHEDULER
+from PipHome.PipStatusBar import PipStatusBar
 from PipHome.Tabs import TimeTab, HomeTab
 
 _logger = Logger("PipHome", level="DEBUG")
@@ -61,14 +60,7 @@ def _render(gui_config):
     tabs.pack(expand=1, fill="both")
 
     # bottom frame
-    bottom_frame = PipFrame(root, borderwidth="0")
-    bottom_frame.pack(side=RIGHT)
-    battery = PipLabel(bottom_frame, text="100%")
-    battery.pack(side="right")
-    wifi = PipLabel(bottom_frame, text="WiFi")
-    wifi.pack(side="right")
-    bluetooth = PipLabel(bottom_frame, text="BT")
-    bluetooth.pack(side="right")
+    PipStatusBar(root, borderwidth="0")
 
     root.mainloop()
 
