@@ -36,7 +36,8 @@ class Scheduler:
         while not self._stop:
             now = time.time()
             self._logger.trace("Running loop")
-            for task_name, value in self._tasks.items():
+            tasks = self._tasks.copy()
+            for task_name, value in tasks.items():
                 (task, next_time_to_run) = value
                 if now > next_time_to_run:
                     self._run(task_name, task, now)
