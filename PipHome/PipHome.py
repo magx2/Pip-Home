@@ -14,6 +14,7 @@ _logger = Logger("PipHome", level="DEBUG")
 def run(args):
     config = {
         "gui": {
+            "headless": False,
             "size": {
                 "width": 480,
                 "height": 320
@@ -40,7 +41,8 @@ def render(gui_config):
     root = Tk()
     size = gui_config["size"]
     root.geometry(str(size["width"]) + "x" + str(size["height"]))
-    root.overrideredirect(1)
+    if gui_config["headless"]:
+        root.overrideredirect(1)
     root.configure(background=gui_config["background"],
                    borderwidth="0",
                    highlightthickness="0")
