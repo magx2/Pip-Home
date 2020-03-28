@@ -18,9 +18,9 @@ class TimeTab(PipTab):
 
     def _build(self):
         self._time_frame = PipFrame(self)
-        self._hours = PipLabel(self._time_frame, text="17")
+        self._hours = PipLabel(self._time_frame, text="")
         self._separator = PipLabel(self._time_frame, text=":")
-        self._minutes = PipLabel(self._time_frame, text="22")
+        self._minutes = PipLabel(self._time_frame, text="")
         self._hours.pack(side=LEFT)
         self._separator.pack(side=LEFT)
         self._minutes.pack(side=LEFT)
