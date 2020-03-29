@@ -37,11 +37,12 @@ class PipNotebook(PipFrame):
     def _button_clicked(self, button_name):
         if self._active is not None:
             self._logger.debug("Removing old tab")
-            self._active[0].pack_forget()
+            self._active[0].hide()
             self._active[1].config(background=self._config["gui.button.background"],
                                    foreground=self._config["gui.button.foreground"])
         self._logger.debug(f"Loading tab `{button_name}`")
         (tab, button) = self._tabs[button_name]
-        self._active = (tab.render(self._content), button)
+        tab.render(self._content)
+        self._active = (tab, button)
         button.config(background=self._config["gui.button.foreground"],
                       foreground=self._config["gui.button.background"])

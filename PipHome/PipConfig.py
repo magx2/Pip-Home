@@ -60,5 +60,8 @@ class PipConfig:
                     # https://stackabuse.com/how-to-format-dates-in-python/
                     "date_format": "%a, %d %b %Y"
                 }
+            },
+            "system": {
+                "disk_check_path": "c:/"
             }
         }
