@@ -33,6 +33,14 @@ class PipConfig:
                 "frame": {
                     "background": "#0D0208"
                 },
+                "button": {
+                    "activebackground": "#008F11",
+                    "activeforeground": "#0D0208",
+                    "background": "#0D0208",
+                    "foreground": "#008F11",
+                    "font": "RobotoMono 16",
+                    "borderwidth": 0
+                },
                 "listbox": {
                     "foreground": "#008F11",
                     "background": "#0D0208",
