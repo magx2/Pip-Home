@@ -1,11 +1,13 @@
 from datetime import datetime
 from tkinter import LEFT, BOTTOM, RIGHT, BOTH, Y, END
 
+from requests import get
+
 from PipHome.PipFrame import PipFrame
 from PipHome.PipLabel import PipLabel
 from PipHome.PipListbox import PipListbox
 from PipHome.PipLog import Logger
-from PipHome.PipSchedule import GLOBAL_SCHEDULER, MINUTE, SECOND
+from PipHome.PipSchedule import GLOBAL_SCHEDULER, MINUTE, SECOND, HOUR
 from PipHome.PipTab import PipTab
 
 
@@ -103,6 +105,11 @@ class HomeTab(PipTab):
 
 class MiscTab(PipTab):
     _logger = Logger("Tabs.MiscTab")
+    _main_frame = None
+    _connection_properties = {
+        "connection": "N/A",
+        "ip": "N/A"
+    }
 
     def __init__(self, notebook, config, **kw):
         super().__init__(notebook, config, **kw)
@@ -111,26 +118,84 @@ class MiscTab(PipTab):
         self._right_frame = None
 
     def render(self, parent_content):
-        main_frame = PipFrame(parent_content, self._config)
-        main_frame.pack(fill=BOTH, expand=True)
-        main_frame.grid_columnconfigure(0, weight=1)
-        main_frame.grid_columnconfigure(1, weight=3)
-        main_frame.grid_rowconfigure(0, weight=1)
-        self._build_left_frame(main_frame)
-        self._build_right_frame(main_frame)
-        return main_frame
+        self._main_frame = PipFrame(parent_content, self._config)
+        self._main_frame.pack(fill=BOTH, expand=True)
+        self._main_frame.grid_columnconfigure(0, weight=1)
+        self._main_frame.grid_columnconfigure(1, weight=3)
+        self._main_frame.grid_rowconfigure(0, weight=1)
+        self._build_left_frame(self._main_frame)
+        self._build_connection_tab()
+        return self._main_frame
 
     def _build_left_frame(self, parent_content):
         self._left_frame = PipFrame(parent_content, self._config)
-        # self._left_frame.pack(side=LEFT, fill=Y)
         self._left_frame.grid(row=0, column=0, sticky="nsew")
         self._list = PipListbox(self._left_frame, self._config)
+        self._list.bind('<<ListboxSelect>>', self._on_select)
         self._list.pack(side=LEFT, fill=BOTH, expand=True)
         self._list.insert(END, "Connection")
         self._list.insert(END, "System")
+        self._list.select_set(0)
 
     def _build_right_frame(self, parent_content):
+        if self._right_frame is not None:
+            self._right_frame.pack_forget()
         self._right_frame = PipFrame(parent_content, self._config)
         self._right_frame.grid(row=0, column=1, sticky="nsew")
-        label = PipLabel(self._right_frame, self._config, text="Lorem Ipsum")
+
+    def _on_select(self, event):
+        w = event.widget
+        index = int(w.curselection()[0])
+        value = w.get(index)
+        self._logger.info('You selected item %d: "%s"' % (index, value))
+        if index == 0:
+            self._build_connection_tab()
+        elif index == 1:
+            self._build_system_tab()
+        else:
+            self._logger.warn(f"Do not know what to render on selection {index}")
+            self._build_connection_tab()
+
+    def _build_connection_tab(self):
+        self._logger.debug("Building `Connection` tab")
+        self._build_right_frame(self._main_frame)
+        row = 0
+        connection_label = PipLabel(self._right_frame, self._config, text="Connection")
+        connection_label.grid(row=row, column=0)
+        self._connection_value_label = PipLabel(self._right_frame,
+                                                self._config,
+                                                text=self._connection_properties["connection"])
+        self._connection_value_label.grid(row=row, column=1)
+        row = row + 1
+        ip_label = PipLabel(self._right_frame, self._config, text="IP")
+        ip_label.grid(row=row, column=0)
+        self._ip_value_label = PipLabel(self._right_frame, self._config, text=self._connection_properties["ip"])
+        self._ip_value_label.grid(row=row, column=1)
+        row = row + 1
+        GLOBAL_SCHEDULER.add_task_if_not_present("ip check", self._load_ip)
+
+    def _load_ip(self):
+        try:
+            self._logger.debug("Checking IP address")
+            ip = get('https://api.ipify.org').text
+            self._set_connection("Active")
+            self._set_ip(ip)
+        except Exception as e:
+            self._logger.error(f"Cannot get IP! {e}")
+            self._set_connection("Unavailable")
+            self._set_ip("N/A")
+        return HOUR
+
+    def _set_connection(self, value):
+        self._connection_properties["connection"] = value
+        self._connection_value_label.config(text=value)
+
+    def _set_ip(self, value):
+        self._connection_properties["ip"] = value
+        self._ip_value_label.config(text=value)
+
+    def _build_system_tab(self):
+        self._logger.debug("Building `Connection` tab")
+        self._build_right_frame(self._main_frame)
+        label = PipLabel(self._right_frame, self._config, text="system")
         label.pack(side=LEFT, anchor="nw", expand=True)

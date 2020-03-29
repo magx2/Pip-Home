@@ -14,7 +14,7 @@ class Logger:
         if bool(options):
             self._options = options
         else:
-            self._options = {"level": "INFO"}
+            self._options = {"level": "DEBUG"}
         self._name = name
 
     def _log(self, level, msg, *values):

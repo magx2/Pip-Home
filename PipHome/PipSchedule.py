@@ -30,8 +30,14 @@ class Scheduler:
         self._stop = True
 
     def add_task(self, task_name, task_function):
+        self._logger.debug(f"Adding task `{task_name}` to scheduler")
         self._tasks[task_name] = (task_function, 0)
-        return task_name
+
+    def add_task_if_not_present(self, task_name, task_function):
+        if task_name not in self._tasks:
+            self._tasks[task_name] = (task_function, 0)
+        else:
+            self._logger.debug(f"Not adding task `{task_name}`, because it's already exists")
 
     def _loop(self):
         while not self._stop:
@@ -46,7 +52,11 @@ class Scheduler:
     def _run(self, task_name, task, now):
         try:
             wait_for_next_execution_s = task()
-            self._tasks[task_name] = (task, wait_for_next_execution_s + now)
+            if wait_for_next_execution_s > 0:
+                self._tasks[task_name] = (task, wait_for_next_execution_s + now)
+            else:
+                self._logger.info(f"Removing task `{task_name}`")
+                del self._tasks[task_name]
         except Exception as err:
             self._logger.error("Got error while running task {}\n{}", task_name, err)
 
