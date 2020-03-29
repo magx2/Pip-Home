@@ -12,15 +12,14 @@ from PipHome.PipTab import PipTab
 class TimeTab(PipTab):
     _logger = Logger("Tabs.TimeTab")
 
-    def __init__(self, notebook, time_tab_config, **kw):
-        super().__init__(notebook, **kw)
+    def __init__(self, notebook, config, **kw):
+        super().__init__(notebook, config, **kw)
         self._paused = False
-        self._time_tab_config = time_tab_config
         self.notebook.add(self, text="Time")
         self._main_frame = None
 
     def render(self, parent_content):
-        self._main_frame = PipFrame(parent_content)
+        self._main_frame = PipFrame(parent_content, self._config)
         self._build_time(self._main_frame)
         self._build_date(self._main_frame)
         self._main_frame.pack(fill=BOTH, expand=1)
@@ -28,11 +27,11 @@ class TimeTab(PipTab):
 
     def _build_time(self, parent_content):
         font = "RobotoMono 48"
-        time_frame = PipFrame(parent_content)
-        center_frame = PipFrame(time_frame)
-        self._hours = PipLabel(center_frame, text="xx", font=font)
-        self._separator = PipLabel(center_frame, text=":", font=font)
-        self._minutes = PipLabel(center_frame, text="xx", font=font)
+        time_frame = PipFrame(parent_content, self._config)
+        center_frame = PipFrame(time_frame, self._config)
+        self._hours = PipLabel(center_frame, self._config, text="xx", font=font)
+        self._separator = PipLabel(center_frame, self._config, text=":", font=font)
+        self._minutes = PipLabel(center_frame, self._config, text="xx", font=font)
         self._hours.pack(side=LEFT)
         self._separator.pack(side=LEFT)
         self._minutes.pack(side=LEFT)
@@ -43,8 +42,8 @@ class TimeTab(PipTab):
 
     def _build_date(self, parent_content):
         font = "RobotoMono 18"
-        self._date_frame = PipFrame(parent_content)
-        self._date = PipLabel(self._date_frame, text="...", font=font)
+        self._date_frame = PipFrame(parent_content, self._config)
+        self._date = PipLabel(self._date_frame, self._config, text="...", font=font)
         self._date.pack(side=RIGHT)
         self._date_frame.pack(side=BOTTOM)
         GLOBAL_SCHEDULER.add_task("update date", self._update_date)
@@ -64,7 +63,7 @@ class TimeTab(PipTab):
 
     def _update_date(self):
         self._logger.trace("Updating date")
-        now = datetime.now().strftime(self._time_tab_config["date_format"])
+        now = datetime.now().strftime(self._config["gui.time_tab.date_format"])
         self._date.config(text=now)
         return MINUTE
 
@@ -88,15 +87,15 @@ def _add_zero_if_missing(number):
 class HomeTab(PipTab):
     _logger = Logger("Tabs.HomeTab")
 
-    def __init__(self, notebook, **kw):
-        super().__init__(notebook, **kw)
+    def __init__(self, notebook, config, **kw):
+        super().__init__(notebook, config, **kw)
         notebook.add(self, text="Home")
         self._main_frame = None
         self._home = None
 
     def render(self, parent_content):
-        self._main_frame = PipFrame(parent_content)
-        self._home = PipLabel(self._main_frame, text="Home label")
+        self._main_frame = PipFrame(parent_content, self._config)
+        self._home = PipLabel(self._main_frame, self._config, text="Home label")
         self._home.pack()
         self._main_frame.pack(fill=BOTH, expand=1)
         return self._main_frame
@@ -105,25 +104,25 @@ class HomeTab(PipTab):
 class MiscTab(PipTab):
     _logger = Logger("Tabs.MiscTab")
 
-    def __init__(self, notebook, **kw):
-        super().__init__(notebook, **kw)
+    def __init__(self, notebook, config, **kw):
+        super().__init__(notebook, config, **kw)
         notebook.add(self, text="Misc")
         self._main_frame = None
         self._left_frame = None
         self._right_frame = None
 
     def render(self, parent_content):
-        self._main_frame = PipFrame(parent_content)
+        self._main_frame = PipFrame(parent_content, self._config)
         self._build_left_frame(self._main_frame)
-        self._right_frame = PipFrame(self._main_frame)
+        self._right_frame = PipFrame(self._main_frame, self._config)
         self._right_frame.pack(fill=Y, expand=1, side=RIGHT)
         self._main_frame.pack(fill=BOTH, expand=1)
         return self._main_frame
 
     def _build_left_frame(self, parent_content):
-        self._left_frame = PipFrame(parent_content)
+        self._left_frame = PipFrame(parent_content, self._config)
         self._left_frame.pack(fill=Y, expand=1, side=LEFT)
-        self._list = PipListbox(parent_content)
+        self._list = PipListbox(parent_content, self._config)
         self._list.pack(side=TOP)
         self._list.insert(END, "Connection")
         self._list.insert(END, "System")

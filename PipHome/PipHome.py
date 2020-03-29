@@ -11,10 +11,9 @@ _logger = Logger("PipHome", level="DEBUG")
 
 
 def run(args):
-    config = PipConfig(args)
     GLOBAL_SCHEDULER.start_main_loop()
 
-    _render(config)
+    _render(PipConfig(args))
 
 
 def _render(config):
@@ -29,13 +28,13 @@ def _render(config):
                    highlightthickness="0")
 
     # tabs
-    tabs = PipNotebook(root)
-    TimeTab(tabs, time_tab_config=config["gui.time_tab"])
-    HomeTab(tabs)
-    MiscTab(tabs)
+    tabs = PipNotebook(root, config)
+    TimeTab(tabs, config)
+    HomeTab(tabs, config)
+    MiscTab(tabs, config)
     tabs.pack(expand=1, fill="both")
 
     # bottom frame
-    PipStatusBar(root, borderwidth="0")
+    PipStatusBar(root, config, borderwidth="0")
 
     root.mainloop()
