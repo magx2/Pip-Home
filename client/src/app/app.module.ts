@@ -6,13 +6,15 @@ import {AppComponent} from './app.component';
 import {ClockComponent} from './clock/clock.component';
 import {MiscComponent} from './misc/misc.component';
 import {HomeComponent} from './home/home.component';
+import {FooterComponent} from './footer/footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ClockComponent,
     MiscComponent,
-    HomeComponent
+    HomeComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
