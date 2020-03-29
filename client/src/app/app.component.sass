@@ -1,0 +1,44 @@
+#main-container
+  width: 480px
+  height: 320px
+  border: 1px solid black
+  margin: 0
+  padding: 0
+
+nav
+  height: 32px
+  width: 100%
+  border-bottom: 1px solid #060
+  border-top-right-radius: 20px
+  z-index: 95
+  border-top-left-radius: 20px
+
+  span
+    animation: colorPulse 5s infinite ease-in-out
+    line-height: 34px
+    font-size: 16pt
+    letter-spacing: 0.3px
+    margin-left: 14px
+    font-weight: 300
+
+  .active
+    border-right: 1px solid #060
+    border-left: 1px solid #060
+    border-bottom: 1px solid #000
+    border-top-left-radius: 5px
+    border-top-right-radius: 5px
+    padding: 3px 6px 3px 6px
+
+a
+  animation: colorPulse 5s infinite ease-in-out
+  text-decoration: none
+  text-transform: uppercase
+
+footer
+  display: block
+  position: absolute
+  top: 288px
+  left: 0
+  height: 32px
+  width: 100%
+  border-top: 1px solid #060

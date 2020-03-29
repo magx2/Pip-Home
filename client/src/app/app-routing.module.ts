@@ -1,11 +1,17 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {ClockComponent} from "./clock/clock.component";
+import {MiscComponent} from "./misc/misc.component";
 
 
-const routes: Routes = [];
+const routes: Routes = [
+  {path: "misc", component: MiscComponent},
+  {path: "", component: ClockComponent}
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}
