@@ -20,12 +20,20 @@ export class ClockComponent implements OnInit {
   ngOnInit(): void {
     this.subscription = this.timer.subscribe(_ => {
       const date = new Date();
-      this.hour = date.getHours().toString();
-      this.minute = date.getMinutes().toString();
+      this.hour = this.buildTwoDigitsString(date.getHours());
+      this.minute = this.buildTwoDigitsString(date.getMinutes());
       this.separator = this.separator === ":" ? "&nbsp;" : ":";
       const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
       this.date = date.toLocaleDateString("en-US", options)
     })
+  }
+
+  buildTwoDigitsString(number: number) {
+    if (number > 9) {
+      return number.toString();
+    } else {
+      return "0" + number.toString();
+    }
   }
 
   ngOnDestroy(): void {
