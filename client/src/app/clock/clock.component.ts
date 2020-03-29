@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {interval, Subscription} from 'rxjs';
+import {Subscription, timer} from 'rxjs';
 
 @Component({
   selector: 'app-clock',
@@ -11,7 +11,7 @@ export class ClockComponent implements OnInit {
   minute: string = "&nbsp;&nbsp;";
   separator: string = "&nbsp;";
   date: string = "";
-  timer = interval(1000);
+  timer = timer(0, 1000);
   subscription: Subscription;
 
   constructor() {
