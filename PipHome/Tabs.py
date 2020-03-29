@@ -1,8 +1,9 @@
 from datetime import datetime
-from tkinter import LEFT, BOTTOM, RIGHT, BOTH, Y
+from tkinter import LEFT, BOTTOM, RIGHT, BOTH, Y, TOP, END
 
 from PipHome.PipFrame import PipFrame
 from PipHome.PipLabel import PipLabel
+from PipHome.PipListbox import PipListbox
 from PipHome.PipLog import Logger
 from PipHome.PipSchedule import GLOBAL_SCHEDULER, MINUTE, SECOND
 from PipHome.PipTab import PipTab
@@ -85,3 +86,22 @@ class HomeTab(PipTab):
         super().__init__(notebook, **kw)
         self._home_tab = PipFrame(notebook, borderwidth="-2")
         notebook.add(self._home_tab, text="Home")
+
+
+class MiscTab(PipTab):
+    _logger = Logger("Tabs.MiscTab")
+
+    def __init__(self, notebook, **kw):
+        super().__init__(notebook, **kw)
+        self._build_left_frame()
+        self._right_frame = PipFrame(self)
+        self._right_frame.pack(fill=Y, expand=1, side=RIGHT)
+        notebook.add(self, text="Misc")
+
+    def _build_left_frame(self):
+        self._left_frame = PipFrame(self)
+        self._left_frame.pack(fill=Y, expand=1, side=LEFT)
+        self._list = PipListbox(self)
+        self._list.pack(side=TOP)
+        self._list.insert(END, "Connection")
+        self._list.insert(END, "System")

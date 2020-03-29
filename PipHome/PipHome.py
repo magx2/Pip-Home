@@ -5,7 +5,7 @@ from PipHome.PipLog import Logger
 from PipHome.PipNotebook import PipNotebook
 from PipHome.PipSchedule import GLOBAL_SCHEDULER
 from PipHome.PipStatusBar import PipStatusBar
-from PipHome.Tabs import TimeTab, HomeTab
+from PipHome.Tabs import TimeTab, HomeTab, MiscTab
 
 _logger = Logger("PipHome", level="DEBUG")
 
@@ -57,6 +57,7 @@ def _render(gui_config):
     tabs.config(padding="0")
     TimeTab(tabs, time_tab_config=gui_config["time_tab"])
     HomeTab(tabs)
+    MiscTab(tabs)
     tabs.pack(expand=1, fill="both")
 
     # bottom frame
