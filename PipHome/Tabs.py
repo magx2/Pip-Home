@@ -1,5 +1,5 @@
 from datetime import datetime
-from tkinter import LEFT, BOTTOM, RIGHT, BOTH, Y, TOP, END
+from tkinter import LEFT, BOTTOM, RIGHT, BOTH, Y, END
 
 from PipHome.PipFrame import PipFrame
 from PipHome.PipLabel import PipLabel
@@ -107,22 +107,30 @@ class MiscTab(PipTab):
     def __init__(self, notebook, config, **kw):
         super().__init__(notebook, config, **kw)
         notebook.add(self, text="Misc")
-        self._main_frame = None
         self._left_frame = None
         self._right_frame = None
 
     def render(self, parent_content):
-        self._main_frame = PipFrame(parent_content, self._config)
-        self._build_left_frame(self._main_frame)
-        self._right_frame = PipFrame(self._main_frame, self._config)
-        self._right_frame.pack(fill=Y, expand=1, side=RIGHT)
-        self._main_frame.pack(fill=BOTH, expand=1)
-        return self._main_frame
+        main_frame = PipFrame(parent_content, self._config)
+        main_frame.pack(fill=BOTH, expand=True)
+        main_frame.grid_columnconfigure(0, weight=1)
+        main_frame.grid_columnconfigure(1, weight=3)
+        main_frame.grid_rowconfigure(0, weight=1)
+        self._build_left_frame(main_frame)
+        self._build_right_frame(main_frame)
+        return main_frame
 
     def _build_left_frame(self, parent_content):
         self._left_frame = PipFrame(parent_content, self._config)
-        self._left_frame.pack(fill=Y, expand=1, side=LEFT)
-        self._list = PipListbox(parent_content, self._config)
-        self._list.pack(side=TOP)
+        # self._left_frame.pack(side=LEFT, fill=Y)
+        self._left_frame.grid(row=0, column=0, sticky="nsew")
+        self._list = PipListbox(self._left_frame, self._config)
+        self._list.pack(side=LEFT, fill=BOTH, expand=True)
         self._list.insert(END, "Connection")
         self._list.insert(END, "System")
+
+    def _build_right_frame(self, parent_content):
+        self._right_frame = PipFrame(parent_content, self._config)
+        self._right_frame.grid(row=0, column=1, sticky="nsew")
+        label = PipLabel(self._right_frame, self._config, text="Lorem Ipsum")
+        label.pack(side=LEFT, anchor="nw", expand=True)
