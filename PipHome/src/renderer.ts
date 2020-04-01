@@ -42,7 +42,7 @@ function buildTwoDigitsString(number: number): string {
 	}
 }
 
-timer(0, 1000).subscribe(next => {
+const subscription = timer(0, 1000).subscribe(next => {
 	const date = new Date();
 	document.querySelector('#hour').innerHTML = buildTwoDigitsString(date.getHours());
 	document.querySelector('#minute').innerHTML = buildTwoDigitsString(date.getMinutes());
