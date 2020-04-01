@@ -32,8 +32,40 @@ import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
 
 import {timer} from 'rxjs';
 
+const $: JQueryStatic = require("jquery");
+const {readFileSync} = require('fs');
+
 document.querySelector('#hour').innerHTML = '22';
 
+const navClock = $("#nav-clock");
+const navHome = $("#nav-home");
+const navMisc = $("#nav-misc");
+
+function deactivateWholeNavbar() {
+	navClock.removeClass('active');
+	navHome.removeClass('active');
+	navMisc.removeClass('active');
+}
+
+navClock.on("click", function () {
+	deactivateWholeNavbar();
+	navClock.addClass('active');
+	$("#main-content").html(readFileSync("./src/clock.html", {encoding: "UTF-8"}));
+});
+
+navHome.on("click", function () {
+	deactivateWholeNavbar();
+	navHome.addClass('active');
+	$("#main-content").html(readFileSync("./src/home.html", {encoding: "UTF-8"}));
+});
+
+navMisc.on("click", function () {
+	deactivateWholeNavbar();
+	navMisc.addClass('active');
+	$("#main-content").html(readFileSync("./src/misc.html", {encoding: "UTF-8"}));
+});
+
+// CLOCK NAV
 function buildTwoDigitsString(number: number): string {
 	if (number > 9) {
 		return number.toString();
@@ -44,9 +76,9 @@ function buildTwoDigitsString(number: number): string {
 
 const subscription = timer(0, 1000).subscribe(next => {
 	const date = new Date();
-	document.querySelector('#hour').innerHTML = buildTwoDigitsString(date.getHours());
-	document.querySelector('#minute').innerHTML = buildTwoDigitsString(date.getMinutes());
-	document.querySelector('#separator').innerHTML = next % 2 === 0 ? "&nbsp;" : ":";
+	$('#hour').text(buildTwoDigitsString(date.getHours()));
+	$('#minute').text(buildTwoDigitsString(date.getMinutes()));
+	$('#separator').html(next % 2 === 0 ? "&nbsp;" : ":");
 	const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
-	document.querySelector('#date').innerHTML = date.toLocaleDateString("en-US", options)
+	$('#date').text(date.toLocaleDateString("en-US", options));
 });
