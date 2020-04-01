@@ -83,6 +83,9 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "bootstrap": "^4.4.1",
+    "electron-squirrel-startup": "^1.0.0",
+    "jquery": "^3.4.1",
+    "popper": "^1.0.1"
   }
 }
