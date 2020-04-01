@@ -29,3 +29,24 @@
 import './index.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
+
+import {timer} from 'rxjs';
+
+document.querySelector('#hour').innerHTML = '22';
+
+function buildTwoDigitsString(number: number): string {
+	if (number > 9) {
+		return number.toString();
+	} else {
+		return "0" + number.toString();
+	}
+}
+
+timer(0, 1000).subscribe(next => {
+	const date = new Date();
+	document.querySelector('#hour').innerHTML = buildTwoDigitsString(date.getHours());
+	document.querySelector('#minute').innerHTML = buildTwoDigitsString(date.getMinutes());
+	document.querySelector('#separator').innerHTML = next % 2 === 0 ? "&nbsp;" : ":";
+	const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+	document.querySelector('#date').innerHTML = date.toLocaleDateString("en-US", options)
+});
